@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Project motor encoder</title>
+		<script src="http://localhost:8080/socket.io/socket.io.js"></script>    
+        <script type="text/javascript" src="motor_encoder.js"></script>
+<link rel="shortcut icon" href="#" />
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script> 
+        
+        <script>
+        
+       var radio = 600;
+        var values_items = {
+        	
+        		min:280, 
+        		max:80, 
+        		param_in	:"A",   //hasta 255 
+        		state:"set", 
+        		speed_transmision:200,
+        		min_value:0, 
+        		max_value:10,        		
+        		x_circum:radio*1.1111111,
+        		y_circum:radio*1.0888888,
+        		w_square:600,
+        		h_square:600,
+        		radius_circum:radio,
+        		largo_pata:radio*0.0111111,
+        		largo_texto:radio*0.0166666,
+        		delta_negativos:radio*0.0133333,
+        		resolucion:10,
+        		num_valores_delay:90, 
+        		resolucion_grados:1,  //siempre entero 
+        		speed_update:100,
+        		max_amplitude_signal:100
+        		
+        		}
+			   
+			          
+        
+        </script>
+    </head>
+    
+        <style>
+    
+    	
+    
+    </style>
+ 
+    
+    <body>
+    
+   <canvas style="border:1px solid #000000;" id="myCanvas" ></canvas>
+
+    </body>
+    
+	<script type="text/javascript">
+	
+	var x = 0;
+	var y = 0;
+	var xx = 0;
+	var yy = 0;
+	
+	var canvas = document.getElementById('myCanvas');
+            var socket = io.connect("localhost:8080"); 
+ 		        		
+        		
+			canvas.width  = values_items.w_square;
+			canvas.height = values_items.h_square;;
+			var ctx = canvas.getContext('2d');	
+		   
+		   draw_square(ctx);
+		      
+		     
+ 				
+ 				canvas.addEventListener("mousemove", on_canvas_click, false);
+
+ 			function on_canvas_click(ev) {
+    			x = ev.clientX - canvas.offsetLeft;
+    			y = ev.clientY - canvas.offsetTop;
+    			xx = regla_de_tres(x,0,600,90,-90);
+    			yy = regla_de_tres(y,0,600,0,180);
+ 				//var msg_out = {x:xx,y:yy}
+ 				ctx.beginPath();
+				ctx.arc(x, y , 5, 0, 2 * Math.PI);
+				ctx.stroke();
+    			draw_square(ctx);
+    			draw_text(ctx,x,y,xx,yy);
+    			
+			}
+			
+			setInterval(function () {
+			
+								 	 			
+	 			  var msg_out = {x:xx,y:yy}
+	 			  
+	  
+	 			  var msg_json = JSON.stringify(msg_out);
+	 			  console.log(msg_json);
+	 			  socket.emit('event', msg_json);
+				
+	
+			}, values_items.speed_transmision);            
+ 				
+	</script>    
+    
+</html>

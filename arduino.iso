@@ -1,0 +1,73 @@
+
+
+
+//Motor B
+ int enableB = 9;
+ int pinB1 = 4;
+ int pinB2 = 5;
+ int dir = 0;
+ int speed = 0;
+ int interv = 3;
+
+void setup() {
+
+
+
+Serial.begin(115200);
+pinMode (enableB, OUTPUT);
+ pinMode (pinB1, OUTPUT);
+ pinMode (pinB2, OUTPUT);
+   
+}
+
+void loop() {
+  
+if (Serial.available() > 0) {
+  
+
+      delay(2);
+      readString = Serial.readStringUntil('\n');
+     
+      }
+      x_string = readString.substring(0,3);
+      y_string = readString.substring(3,6);
+      
+      x = x_string.toInt();
+      y = y_string.toInt();
+
+      if(y > 0){dir = 1;speed = map(y,0,90,0,255);}
+      else if(y<0){dir = -1;speed = map(y,0,-90,0,255);}
+      else{dir==0;}
+      
+      //servoMotorX.write(x);
+      //servoMotorY.write(y);    
+ 
+}
+
+if(dir==1)
+{
+ digitalWrite (pinB1, LOW);
+ digitalWrite (pinB2, HIGH);
+analogWrite(enableB, speed);
+}
+else if(dir==-1)
+{
+ digitalWrite (pinB1, HIGH);
+ digitalWrite (pinB2, LOW);
+analogWrite(enableB, speed);
+
+}
+else
+{
+ digitalWrite (pinB1, LOW);
+ digitalWrite (pinB2, LOW);
+}
+
+
+}
+
+
+
+
+
+
