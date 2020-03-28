@@ -61,7 +61,7 @@ sp.on('open', function (err) {
  
 sp.on("data", function(data) {
 	
-	console.log('viene de ardu: '+data)
+	console.log('ardu: '+data)
 	
 	var data_string = data.toString();
 	var data_json = arduino_functions.funcion_conversion_ardu_node(data_string);
@@ -105,7 +105,7 @@ if(arduino_connect){
 	
 	var output = number_of_parameters + data;
 	
-	console.log("envio a ardu: "+output);
+	console.log(output);
 	
 	sp.write(output);
 	

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Multifunction Arduino</title>
+		<script src="http://localhost:8080/socket.io/socket.io.js"></script>    
+		<link rel="stylesheet" type="text/css" href="index.css">
+<link rel="shortcut icon" href="#" />
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script> 
+        
+        <script>  
+        
+        var socket = io.connect("localhost:8080"); 
+        
+        
+        </script>
+    </head>
+    
+   
+ 
+    
+    <body>
+    
+    <table style="width:100%">
+    <tr>
+    <td>
+    <b>Inputs
+    </td>
+    <td>
+    
+    <b>Outputs
+    </td>
+    </tr>
+    
+    <tr>
+    	<td>
+    		Switches
+    		<table style="width:100%">
+			<tr>
+				<td>
+				#S1
+				<p>
+				<label class="switch">
+  				<input type="checkbox" id="1" onclick="checkbox_click('1')">
+  				<span class="slider round"></span>
+				</label>
+				</td>
+			</tr>  
+			<tr>
+				<td>
+				#S2
+				<p>
+				<label class="switch">
+  				<input type="checkbox" onclick="checkbox_click(2)">
+  				<span class="slider round"></span>
+				</label>
+	
+				</td>
+			</tr>  
+			</table>
+		</td>
+	 
+	</td>
+   <td> 
+    	Switches
+   	<table style="width:100%">
+		<tr>
+			<td>
+	
+			Switch result #1
+	
+			</td>
+		</tr>  
+		<tr>
+			<td>
+	
+			Switch result #2
+	
+			</td>
+		</tr>   
+    	</table>
+    </td>
+   </tr>
+   
+   <tr>
+    	<td>
+    		Rangers
+    		<table style="width:100%">
+			<tr>
+				<td>
+				#R1
+				<p>
+					<div class="slidecontainer">
+  					<input type="range" min="0" max="255" value="0" class="slider" id="3">
+					</div>
+				<p>
+				<div id="t3"></div>
+				</td>
+			</tr>  
+			<tr>
+				<td>
+				#R2
+				<p>
+				
+	
+				</td>
+			</tr>  
+			</table>
+		</td>
+	 
+	</td>
+   <td> 
+    	Rangers
+   	<table style="width:100%">
+		<tr>
+			<td>
+	
+			Range result #1
+	
+			</td>
+		</tr>  
+		<tr>
+			<td>
+	
+			Range result #2
+	
+			</td>
+		</tr>   
+    	</table>
+    </td>
+   </tr>
+    
+    </table>
+
+
+    </body>
+    
+	<script type="text/javascript">
+	
+	function checkbox_click(n)
+	
+	{
+	var checkBox = document.getElementById(n);
+	if (checkBox.checked == true){
+    var msg_out = n.concat("255");
+  } else {
+    var msg_out = n.concat("000");
+  }
+	
+	 			  
+	  
+	
+	console.log(msg_out);
+	socket.emit('event', msg_out);
+	
+	
+	}	
+	
+	var slider3 = document.getElementById("3");
+	var slider_text3 = document.getElementById("t3");
+	slider_text3.innerHTML = slider3.value; // Display the default slider value
+	var a = "3";
+	slider3.oninput = function() {
+	var value_padded = pad(this.value,3);
+  	slider_text3.innerHTML = value_padded;
+  	var msg_out = a + value_padded;
+  	console.log(msg_out);
+  	socket.emit('event', msg_out);
+	}
+
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
+	
+	</script>    
+    
+</html>
